@@ -1,12 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import Home from "./src/Components/Home"
+import { useTheme } from "./src/Theme/themeHooks"
+import { useEffect } from 'react';
+import { loadSavedMode } from './src/Theme/themeStore';
 
 export default function App() {
+  const { scheme } = useTheme()
+  useEffect(() => { loadSavedMode(); }, []);
+  console.log("App")
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Home />
   );
 }
 
