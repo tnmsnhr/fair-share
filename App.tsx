@@ -1,24 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import Home from "./src/Components/Home"
-import { useTheme } from "./src/Theme/themeHooks"
-import { useEffect } from 'react';
-import { loadSavedMode } from './src/Theme/themeStore';
+import React from "react";
+import { StatusBar } from "expo-status-bar";
+import { ThemeProvider, useTheme } from "./src/Theme/theme";
+import Home from "./src/Screens/Home";
+import { Platform, SafeAreaView } from "react-native";
 
-export default function App() {
-  const { scheme } = useTheme()
-  useEffect(() => { loadSavedMode(); }, []);
-  console.log("App")
+function Shell() {
+  const t = useTheme();
   return (
-    <Home />
+    <SafeAreaView style={{ flex: 1, backgroundColor: t.bg }}>
+      <StatusBar
+        style={t.isDark ? "light" : "dark"}
+        backgroundColor={Platform.OS === "android" ? t.bg : undefined}
+      />
+      <Home />
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <ThemeProvider>
+      <Shell />
+    </ThemeProvider>
+  );
+}
