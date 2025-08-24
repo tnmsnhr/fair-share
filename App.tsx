@@ -1,19 +1,44 @@
+// App.tsx
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { ThemeProvider, useTheme } from "./src/Theme/theme";
-import Home from "./src/Screens/Home";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Platform, SafeAreaView } from "react-native";
+import {
+  NavigationContainer,
+  DarkTheme,
+  DefaultTheme,
+} from "@react-navigation/native";
+import { ThemeProvider, useTheme } from "./src/theme/theme";
+import RootTabs from "./src/navigation/RootTabs";
 
 function Shell() {
   const t = useTheme();
+
+  // Bridge your theme to React Navigation so background isn’t white
+  const navTheme = {
+    ...(t.isDark ? DarkTheme : DefaultTheme),
+    colors: {
+      ...(t.isDark ? DarkTheme.colors : DefaultTheme.colors),
+      background: t.bg,
+      card: t.card,
+      text: t.text,
+      border: t.border,
+      primary: t.primary,
+    },
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: t.bg }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* <SafeAreaView style={{ flex: 1, backgroundColor: t.bg }}> */}
       <StatusBar
         style={t.isDark ? "light" : "dark"}
         backgroundColor={Platform.OS === "android" ? t.bg : undefined}
       />
-      <Home />
-    </SafeAreaView>
+      <NavigationContainer theme={navTheme}>
+        <RootTabs />
+      </NavigationContainer>
+      {/* </SafeAreaView> */}
+    </GestureHandlerRootView>
   );
 }
 

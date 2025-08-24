@@ -1,4 +1,4 @@
-import { makeStyles, useTheme, useThemeMode } from "@/Theme/theme";
+import { makeStyles, useTheme, useThemeMode } from "@/theme/theme";
 import {
   Button,
   GhostButton,
@@ -10,16 +10,30 @@ import {
   TitleBold,
   Typo,
   Input,
-} from "@/UI-Components";
+  Dropdown,
+  Layout,
+} from "@/ui-components";
+
 import React, { useState } from "react";
 import { View, Text, Pressable, ScrollView, SafeAreaView } from "react-native";
+
+const members = [
+  { label: "You", value: "me" },
+  { label: "Aarav", value: "aarav" },
+  { label: "Isha", value: "isha" },
+  { label: "Tanmoy", value: "Tanmoy" },
+  { label: "Shreya", value: "Shreya" },
+  { label: "Amit", value: "Amit" },
+  { label: "Uttam", value: "Uttam" },
+  { label: "Saurabh", value: "isSaurabhha" },
+  { label: "Rahul", value: "rahul", disabled: true },
+];
 
 const useStyles = makeStyles((t) => {
   return {
     root: {
       flex: 1,
       backgroundColor: t.bg,
-      padding: 20,
       justifyContent: "center",
     },
     card: {
@@ -57,9 +71,11 @@ export default function Home() {
 
   const [state, setState] = useState(10);
   const [open, setOpen] = useState(false);
+  const [who, setWho] = useState<string | undefined>();
+
   console.log(state, "Home Rendered");
   return (
-    <ScrollView>
+    <Layout scroll>
       <View style={s.root}>
         <View style={s.card}>
           <Text style={s.title}>
@@ -174,7 +190,21 @@ export default function Home() {
             tone="disabled"
           />
         </View>
+        <View style={{ ...s.card, marginTop: 20 }}>
+          <Typo>Split with</Typo>
+
+          <Dropdown
+            label="Member"
+            placeholder="Choose a person"
+            value={who}
+            options={members}
+            onChange={(val) => setWho(val)}
+            // searchable
+          />
+
+          <PrimaryButton label="Continue" fullWidth disabled={!who} />
+        </View>
       </View>
-    </ScrollView>
+    </Layout>
   );
 }

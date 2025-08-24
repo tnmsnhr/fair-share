@@ -1,4 +1,4 @@
-import { useTheme } from "@/Theme/theme";
+import { useTheme } from "@/theme/theme";
 import React from "react";
 import { Text, TextProps, TextStyle, StyleSheet } from "react-native";
 // ⬇️ adjust import path if you use an alias like "@/theme/simpleThemeStrict"

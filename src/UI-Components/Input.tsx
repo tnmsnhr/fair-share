@@ -1,6 +1,5 @@
 // src/UI-Components/Input.tsx
-import { withAlpha } from "@/Theme/colorUtils";
-import { useTheme } from "@/Theme/theme";
+import { useTheme } from "@/theme/theme";
 import React, { forwardRef, useMemo, useState } from "react";
 import {
   TextInput,
@@ -13,8 +12,7 @@ import {
   TextStyle,
   StyleProp,
 } from "react-native";
-// import { useTheme } from '@/theme/simpleThemeStrict';
-// import { withAlpha } from '@/theme/colorUtils';
+import { withAlpha } from "@/theme/colorUtils";
 
 type Size = "sm" | "md" | "lg";
 type Tone = "default" | "error" | "warning" | "success" | "info" | "disabled";

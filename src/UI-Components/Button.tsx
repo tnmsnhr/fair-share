@@ -1,4 +1,4 @@
-import { useTheme } from "@/Theme/theme";
+import { useTheme } from "@/theme/theme";
 import React from "react";
 import {
   ActivityIndicator,

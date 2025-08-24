@@ -30,6 +30,7 @@ const tokens = {
   success: { light: "#16a34a", dark: "#22c55e" },
   warning: { light: "#f59e0b", dark: "#fbbf24" },
   danger: { light: "#dc2626", dark: "#ef4444" },
+  backdrop: { light: "#5c636e", dark: "#213045" },
 } as const satisfies TokenMap;
 
 export type Scheme = "light" | "dark";
