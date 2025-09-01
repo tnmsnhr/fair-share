@@ -1,5 +1,6 @@
 // App.tsx
 import React from "react";
+import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Platform, SafeAreaView } from "react-native";
@@ -9,7 +10,7 @@ import {
   DefaultTheme,
 } from "@react-navigation/native";
 import { ThemeProvider, useTheme } from "./src/theme/theme";
-import RootTabs from "./src/navigation/RootTabs";
+import RootNavigator from "./src/navigation/RootNavigator";
 
 function Shell() {
   const t = useTheme();
@@ -35,7 +36,7 @@ function Shell() {
         backgroundColor={Platform.OS === "android" ? t.bg : undefined}
       />
       <NavigationContainer theme={navTheme}>
-        <RootTabs />
+        <RootNavigator />
       </NavigationContainer>
       {/* </SafeAreaView> */}
     </GestureHandlerRootView>

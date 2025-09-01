@@ -6,30 +6,36 @@ import Friends from "@/screens/Friends";
 import AddExpenses from "@/screens/AddExpenses";
 import Group from "@/screens/Group";
 import Activity from "@/screens/Activity";
-import { Screen } from "./type";
+import { SCREEN } from "./type";
 
 export type RootTabParamList = {
-  [Screen.HOME]: undefined;
-  [Screen.FRIENDS]: undefined;
-  [Screen.GROUPS]: undefined;
-  [Screen.ADD_EXPENSES]: undefined;
-  [Screen.ACTIVITY]: undefined;
+  [SCREEN.HOME]: undefined;
+  [SCREEN.FRIENDS]: undefined;
+  [SCREEN.GROUPS]: undefined;
+  [SCREEN.ADD_EXPENSES]: undefined;
+  [SCREEN.ACTIVITY]: undefined;
 };
 
-const Tab = createBottomTabNavigator<RootTabParamList>();
+const Tab = createBottomTabNavigator();
 
 export default function RootTabs() {
   return (
     <Tab.Navigator
       id="root-tabs"
       screenOptions={{ headerShown: false }}
-      tabBar={(props) => <TabBar {...props} />}
+      tabBar={(props) => (
+        <TabBar
+          {...props}
+          onPlusPress={() =>
+            props.navigation.navigate(SCREEN.ADD_EXPENSES as never)
+          }
+        />
+      )}
     >
-      <Tab.Screen name={Screen.HOME} component={Home} />
-      <Tab.Screen name={Screen.FRIENDS} component={Friends} />
-      <Tab.Screen name={Screen.ADD_EXPENSES} component={AddExpenses} />
-      <Tab.Screen name={Screen.GROUPS} component={Group} />
-      <Tab.Screen name={Screen.ACTIVITY} component={Activity} />
+      <Tab.Screen name={SCREEN.HOME} component={Home} />
+      <Tab.Screen name={SCREEN.FRIENDS} component={Friends} />
+      <Tab.Screen name={SCREEN.GROUPS} component={Group} />
+      <Tab.Screen name={SCREEN.ACTIVITY} component={Activity} />
     </Tab.Navigator>
   );
 }

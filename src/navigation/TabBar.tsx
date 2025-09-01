@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
   View,
   Pressable,
@@ -8,75 +8,65 @@ import {
 } from "react-native";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { useSharedValue, withTiming } from "react-native-reanimated";
 import { useTheme } from "@/theme/theme";
 import { withAlpha } from "@/theme/colorUtils";
+import { SCREEN } from "./type";
+import { Icon, IconName, IconVariant } from "@/ui-components";
 
-// optional: if you added spacing tokens
-// import { s } from '@/theme/spacing';
+type Props = BottomTabBarProps & {
+  onPlusPress?: () => void;
+};
+
+const FAB_SIZE = 64; // diameter of the + circle
+const CENTER_GAP = 10; // horizontal padding around FAB inside the bar
+const BOTTOM_GAP = 8; // float distance of the whole bar from device bottom
+const BAR_PAD_H = 8;
 
 export default function CustomTabBar({
   state,
   descriptors,
   navigation,
-}: BottomTabBarProps) {
+  onPlusPress,
+}: Props) {
   const t = useTheme();
   const insets = useSafeAreaInsets();
 
   const hasBottomInset = insets.bottom > 0;
-  const GAP = 8; // or s('sm') if using your spacing tokens
+  const GAP = -10; // or s('sm') if using your spacing tokens
   const bottomOffset = hasBottomInset ? insets.bottom + GAP : GAP;
 
-  const count = state.routes.length;
-  const width = useSharedValue(0);
-  const itemW = useSharedValue(0);
-  const indicatorX = useSharedValue(0);
+  const barWidthRef = useRef(0);
+  const [barHeight, setBarHeight] = useState(0);
 
-  const containerOnLayout = (e: LayoutChangeEvent) => {
-    width.value = e.nativeEvent.layout.width;
-    itemW.value = width.value / count;
-    // set initial indicator position
-    indicatorX.value = withTiming(itemW.value * state.index);
+  const onBarLayout = (e: LayoutChangeEvent) => {
+    barWidthRef.current = e.nativeEvent.layout.width;
+    setBarHeight(e.nativeEvent.layout.height);
   };
 
-  // animate indicator whenever active index changes
-  React.useEffect(() => {
-    if (itemW.value > 0) {
-      indicatorX.value = withTiming(itemW.value * state.index, {
-        duration: 240,
-      });
-    }
-  }, [state.index]);
+  const fabRadius = FAB_SIZE / 2;
+  const fabBottomWithinWrap = Math.max(0, barHeight - fabRadius);
 
-  const indicatorStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: indicatorX.value }],
-    width: itemW.value,
-  }));
-
-  const iconFor = (name: string, focused: boolean) => {
-    const map: Record<string, keyof typeof Ionicons.glyphMap> = {
-      Home: focused ? "home" : "home-outline",
-      Activity: focused ? "stats-chart" : "stats-chart-outline",
-      Groups: focused ? "people" : "people-outline",
-      Settings: focused ? "settings" : "settings-outline",
+  const iconFor = (
+    name: keyof SCREEN,
+    focused: boolean
+  ): { name: IconName; variant: IconVariant } => {
+    const map: Record<keyof SCREEN, IconName> = {
+      Home: "home",
+      Activity: "receipt",
+      Groups: "group",
+      Friends: "person",
     };
-    return map[name] ?? "ellipse-outline";
+    return { name: map[name], variant: focused ? "default" : "outline" };
   };
 
   return (
     <View
-      onLayout={containerOnLayout}
+      onLayout={onBarLayout}
       style={[
         styles.wrap,
         {
-          bottom: bottomOffset,
-          paddingTop: 8,
-          backgroundColor: "transparent",
+          bottom: 0,
         },
       ]}
     >
@@ -84,19 +74,17 @@ export default function CustomTabBar({
         style={[
           styles.bar,
           {
-            backgroundColor: "red",
-            // backgroundColor: t.card,
-            borderColor: t.border,
+            backgroundColor: t.card,
+            borderColor: t.navBorder,
+            paddingBottom: bottomOffset,
           },
         ]}
       >
-        {/* animated pill behind active item */}
-        <Animated.View
+        <View
           pointerEvents="none"
           style={[
             styles.indicator,
             { backgroundColor: withAlpha(t.primary, t.isDark ? 0.18 : 0.12) },
-            indicatorStyle,
           ]}
         />
 
@@ -122,35 +110,60 @@ export default function CustomTabBar({
           };
 
           const onLongPress = () => {
+            console.log("long press");
             navigation.emit({ type: "tabLongPress", target: route.key });
           };
 
           const color = focused ? t.primary : t.mutedText;
 
           return (
-            <Pressable
-              key={route.key}
-              onPress={onPress}
-              onLongPress={onLongPress}
-              style={({ pressed }) => [
-                styles.item,
-                pressed && { opacity: 0.9 },
-              ]}
-              accessibilityRole="button"
-              accessibilityState={focused ? { selected: true } : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
-            >
-              <Ionicons
-                name={iconFor(route.name, focused)}
-                size={20}
-                color={color}
-              />
-              <Text style={[styles.label, { color }]} numberOfLines={1}>
-                {label}
-              </Text>
-            </Pressable>
+            <React.Fragment key={route.key}>
+              <Pressable
+                onPress={onPress}
+                onLongPress={onLongPress}
+                style={({ pressed }) => [
+                  styles.item,
+                  pressed && { opacity: 0.9 },
+                  idx == 2 && { marginLeft: 20 },
+                  idx == 1 && { marginRight: 20 },
+                ]}
+                accessibilityRole="button"
+                accessibilityState={focused ? { selected: true } : {}}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
+              >
+                <Icon
+                  {...iconFor(route.name, focused)}
+                  size={28}
+                  color={focused ? t.primary : t.mutedText}
+                />
+                <Text style={[styles.label, { color }]} numberOfLines={1}>
+                  {label}
+                </Text>
+              </Pressable>
+            </React.Fragment>
           );
         })}
+
+        <Pressable
+          key={"plus"}
+          onPress={onPlusPress}
+          style={[
+            styles.addExpenses,
+            {
+              width: FAB_SIZE,
+              height: FAB_SIZE,
+              borderRadius: fabRadius,
+              bottom: fabBottomWithinWrap,
+              left: "50%",
+              transform: [{ translateX: -fabRadius + 8 }],
+              backgroundColor: t.primary,
+              borderColor: withAlpha(t.onPrimary, 0.12),
+            },
+          ]}
+          accessibilityRole="button"
+        >
+          <Icon name="plus" size={40} color={t.white} />
+        </Pressable>
       </View>
     </View>
   );
@@ -162,17 +175,15 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    // If you want the bar to float above content, keep wrap transparent
   },
   bar: {
-    marginHorizontal: 16,
-    borderRadius: 16,
+    borderTopRightRadius: 16,
+    borderTopLeftRadius: 16,
     borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: 8,
     paddingVertical: 6,
     flexDirection: "row",
     alignItems: "center",
-    overflow: "hidden",
   },
   item: {
     flex: 1,
@@ -192,5 +203,17 @@ const styles = StyleSheet.create({
     bottom: 4,
     left: 0,
     borderRadius: 12,
+  },
+  addExpenses: {
+    backgroundColor: "#2563eb",
+    borderRadius: 100,
+    position: "absolute",
+    bottom: 30,
+    height: FAB_SIZE,
+    width: FAB_SIZE,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    left: "50%",
   },
 });

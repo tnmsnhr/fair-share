@@ -1,14 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { makeStyles } from "@/theme/theme";
+import { Typo } from "@/ui-components";
 
 const AddExpenses = () => {
+  const styles = useStyles();
   return (
     <View>
-      <Text>AddExpenses</Text>
+      <Typo>ADD EXPENSES</Typo>
     </View>
   );
 };
 
 export default AddExpenses;
 
-const styles = StyleSheet.create({});
+const useStyles = makeStyles((t) => ({}));

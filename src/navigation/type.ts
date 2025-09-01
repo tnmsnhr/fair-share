@@ -1,4 +1,4 @@
-export enum Screen {
+export enum SCREEN {
   HOME = 'Home',
   ACTIVITY = 'Activity',
   GROUPS = 'Groups',

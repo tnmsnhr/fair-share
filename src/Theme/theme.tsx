@@ -20,9 +20,9 @@ export type Token = { light: string; dark: string };
 export type TokenMap = Record<string, Token>;
 
 const tokens = {
-  bg: { light: "#f8fafc", dark: "#0b0f13" },
-  card: { light: "#ffffff", dark: "#0f1521" },
-  border: { light: "#e2e8f0", dark: "#1f2837" },
+  bg: { light: "#f8fafc", dark: "#0a0f14" },
+  card: { light: "#ffffff", dark: "#0a0f14" },
+  border: { light: "#c7ced6", dark: "#1b2433" },
   primary: { light: "#2563eb", dark: "#3b82f6" },
   onPrimary: { light: "#ffffff", dark: "#0b0f13" },
   text: { light: "#1a1f26", dark: "#f2f4f8" },
@@ -31,6 +31,9 @@ const tokens = {
   warning: { light: "#f59e0b", dark: "#fbbf24" },
   danger: { light: "#dc2626", dark: "#ef4444" },
   backdrop: { light: "#5c636e", dark: "#213045" },
+  navBorder: { light: "#c7ced6", dark: "#26364f" },
+  icon: { light: "#0a0f14", dark: "#f8fafc" },
+  white: { light: "#f8fafc", dark: "#f8fafc" },
 } as const satisfies TokenMap;
 
 export type Scheme = "light" | "dark";

@@ -1,5 +1,4 @@
 {
-  "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -7,10 +6,15 @@
         "src/*"
       ]
     },
-    "moduleResolution": "Bundler"
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true
   },
   "include": [
-    "app",
-    "src"
-  ]
+    "src",
+    "App.tsx",
+    "index.ts",
+    "src/types/**/*.d.ts"
+  ],
+  "extends": "expo/tsconfig.base"
 }

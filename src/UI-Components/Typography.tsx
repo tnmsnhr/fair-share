@@ -1,147 +1,192 @@
-import { useTheme } from "@/theme/theme";
+// src/UI-Components/Typography.tsx
 import React from "react";
-import { Text, TextProps, TextStyle, StyleSheet } from "react-native";
-// ⬇️ adjust import path if you use an alias like "@/theme/simpleThemeStrict"
+import { Text, TextProps, TextStyle, StyleSheet, Platform } from "react-native";
+import { useTheme } from "@/theme/theme";
+import { withAlpha } from "@/theme/colorUtils";
 
-/** Variants (size/weight/line-height presets) */
+/** Variants (type ramp) */
 export type Variant =
-  | "primary"
-  | "secondary"
-  | "caption"
-  | "captionBold"
-  | "subtitle"
+  | "displayXL"
+  | "displayL"
+  | "h1"
+  | "h2"
+  | "h3"
   | "title"
-  | "titleBold"
-  | "display";
+  | "subtitle"
+  | "body"
+  | "bodyStrong"
+  | "bodySmall"
+  | "caption"
+  | "overline"
+  | "code";
 
-/** Color tone overlay on top of a variant */
+/** Semantic tones mapped to theme colors */
 export type Tone =
   | "default"
   | "muted"
+  | "info"
   | "success"
   | "warning"
-  | "info" // maps to theme.primary unless you add a dedicated token
   | "danger"
-  | "debug" // maps to theme.mutedText by default (see mapping)
-  | "disabled";
+  | "debug"
+  | "disabled"
+  | "inverse";
 
 export type TypoProps = TextProps & {
   variant?: Variant;
   tone?: Tone;
-  /** Optional style overrides */
-  bold?: boolean;
+  align?: TextStyle["textAlign"];
   italic?: boolean;
   underline?: boolean;
   uppercase?: boolean;
-  align?: TextStyle["textAlign"];
+  /** Optional explicit weight override (e.g. "700") */
+  weight?: Exclude<TextStyle["fontWeight"], undefined>;
+  /** Respect OS font scaling (default true) */
+  allowFontScaling?: boolean;
+  /** Cap accessibility scaling */
+  maxFontSizeMultiplier?: number;
+  /** When true, text behaves inline (does NOT stretch). Default is block-level. */
+  inline?: boolean;
 };
 
-/** Static, platform-agnostic variant styles */
-const VARIANT_STYLES: Record<Variant, TextStyle> = StyleSheet.create({
-  primary: { fontSize: 16, lineHeight: 22, fontWeight: "400" },
-  secondary: { fontSize: 16, lineHeight: 22, fontWeight: "400" },
+/**
+ * Type ramp on a 4pt grid.
+ * - Headings tighter (≈1.15–1.25)
+ * - Body generous (≈1.45–1.5)
+ * - Subtle letter-spacing adjustments
+ */
+const VARIANT: Record<Variant, TextStyle> = StyleSheet.create({
+  displayXL: {
+    fontSize: 48,
+    lineHeight: 56,
+    fontWeight: "800",
+    letterSpacing: -0.4,
+  },
+  displayL: {
+    fontSize: 40,
+    lineHeight: 48,
+    fontWeight: "800",
+    letterSpacing: -0.2,
+  },
+
+  h1: { fontSize: 32, lineHeight: 40, fontWeight: "700", letterSpacing: -0.1 },
+  h2: { fontSize: 28, lineHeight: 36, fontWeight: "700" },
+  h3: { fontSize: 24, lineHeight: 32, fontWeight: "700" },
+
+  title: { fontSize: 20, lineHeight: 28, fontWeight: "600" },
+  subtitle: { fontSize: 16, lineHeight: 24, fontWeight: "600" },
+
+  body: { fontSize: 16, lineHeight: 24, fontWeight: "400" },
+  bodyStrong: { fontSize: 16, lineHeight: 24, fontWeight: "600" },
+  bodySmall: { fontSize: 14, lineHeight: 20, fontWeight: "400" },
+
   caption: {
     fontSize: 12,
     lineHeight: 16,
-    fontWeight: "400",
+    fontWeight: "500",
     letterSpacing: 0.2,
   },
-  captionBold: {
-    fontSize: 12,
+  overline: {
+    fontSize: 11,
     lineHeight: 16,
-    fontWeight: "700",
-    letterSpacing: 0.2,
+    fontWeight: "600",
+    letterSpacing: Platform.OS === "ios" ? 0.6 : 0.8,
+    textTransform: "uppercase",
   },
-  subtitle: { fontSize: 14, lineHeight: 20, fontWeight: "500" },
-  title: { fontSize: 20, lineHeight: 26, fontWeight: "600" },
-  titleBold: { fontSize: 20, lineHeight: 26, fontWeight: "800" },
-  display: {
-    fontSize: 28,
-    lineHeight: 34,
-    fontWeight: "800",
-    letterSpacing: 0.2,
+
+  code: {
+    fontSize: 13,
+    lineHeight: 20,
+    fontWeight: Platform.OS === "ios" ? "500" : "400",
+    fontFamily: Platform.select({
+      ios: "Menlo",
+      android: "monospace",
+      default: undefined,
+    }),
   },
 });
 
-/** Map tone -> color using your existing theme tokens */
-function resolveToneColor(
-  tone: Tone,
-  variant: Variant,
-  t: ReturnType<typeof useTheme>
-): string {
-  if (tone === "default") {
-    // sensible default: secondary/caption default to muted; others use main text
-    if (
-      variant === "secondary" ||
-      variant === "caption" ||
-      variant === "captionBold"
-    ) {
-      return t.mutedText;
-    }
-    return t.text;
-  }
+function toneColor(tone: Tone, t: ReturnType<typeof useTheme>): string {
   switch (tone) {
+    case "default":
+      return t.text;
     case "muted":
       return t.mutedText;
-    case "success":
-      return t.success;
-    case "warning":
-      return t.warning;
     case "info":
-      return t.primary; // no dedicated "info" token in theme; using primary
+      return t.primary;
+    case "success":
+      return t.success ?? t.primary;
+    case "warning":
+      return t.warning ?? "#E6A700";
     case "danger":
-      return t.danger;
+      return t.danger ?? "#D14343";
     case "debug":
-      return t.mutedText; // adjust if you add a debug token later
+      return t.mutedText;
     case "disabled":
-      return t.mutedText; // or define a "disabled" token in theme
+      return withAlpha(t.text, 0.5);
+    case "inverse":
+      return t.onPrimary ?? "#ffffff";
     default:
       return t.text;
   }
 }
 
-/** Core component */
-export function Typo({
+/** Core component: block-level by default; set inline to true for inline usage */
+export const Typo: React.FC<TypoProps> = ({
   children,
-  variant = "primary",
+  variant = "body",
   tone = "default",
-  bold,
+  align,
   italic,
   underline,
   uppercase,
-  align,
+  weight,
   style,
+  allowFontScaling = true,
+  maxFontSizeMultiplier = 1.2,
+  inline = false,
   ...rest
-}: TypoProps) {
+}) => {
   const t = useTheme();
-  const base = VARIANT_STYLES[variant];
-  const color = resolveToneColor(tone, variant, t);
+  const base = VARIANT[variant];
+  const color = toneColor(tone, t);
 
   const computed: TextStyle = {
     ...base,
     color,
-    textAlign: align,
-    fontWeight: bold ? "700" : base.fontWeight,
+    textAlign: align ?? base.textAlign,
     fontStyle: italic ? "italic" : base.fontStyle,
     textDecorationLine: underline ? "underline" : base.textDecorationLine,
     textTransform: uppercase ? "uppercase" : base.textTransform,
+    ...(weight ? { fontWeight: weight } : null),
+    ...(inline ? null : { alignSelf: "stretch", width: "100%" }), // block by default
   };
 
   return (
-    <Text {...rest} style={[computed, style]}>
+    <Text
+      {...rest}
+      allowFontScaling={allowFontScaling}
+      maxFontSizeMultiplier={maxFontSizeMultiplier}
+      style={[computed, style]}
+    >
       {children}
     </Text>
   );
-}
+};
 
-/** Handy alias components */
-export const Primary = (p: TypoProps) => <Typo {...p} variant="primary" />;
-export const Secondary = (p: TypoProps) => <Typo {...p} variant="secondary" />;
-export const Caption = (p: TypoProps) => <Typo {...p} variant="caption" />;
-export const CaptionBold = (p: TypoProps) => (
-  <Typo {...p} variant="captionBold" />
-);
-export const Subtitle = (p: TypoProps) => <Typo {...p} variant="subtitle" />;
+/** Handy aliases */
+export const DisplayXL = (p: TypoProps) => <Typo {...p} variant="displayXL" />;
+export const DisplayL = (p: TypoProps) => <Typo {...p} variant="displayL" />;
+export const H1 = (p: TypoProps) => <Typo {...p} variant="h1" />;
+export const H2 = (p: TypoProps) => <Typo {...p} variant="h2" />;
+export const H3 = (p: TypoProps) => <Typo {...p} variant="h3" />;
 export const Title = (p: TypoProps) => <Typo {...p} variant="title" />;
-export const TitleBold = (p: TypoProps) => <Typo {...p} variant="titleBold" />;
-export const Display = (p: TypoProps) => <Typo {...p} variant="display" />;
+export const Subtitle = (p: TypoProps) => <Typo {...p} variant="subtitle" />;
+export const Body = (p: TypoProps) => <Typo {...p} variant="body" />;
+export const BodyStrong = (p: TypoProps) => (
+  <Typo {...p} variant="bodyStrong" />
+);
+export const BodySmall = (p: TypoProps) => <Typo {...p} variant="bodySmall" />;
+export const Caption = (p: TypoProps) => <Typo {...p} variant="caption" />;
+export const Overline = (p: TypoProps) => <Typo {...p} variant="overline" />;
+export const Code = (p: TypoProps) => <Typo {...p} variant="code" />;
