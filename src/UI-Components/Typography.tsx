@@ -16,6 +16,7 @@ export type Variant =
   | "body"
   | "bodyStrong"
   | "bodySmall"
+  | "bodySmallBold"
   | "caption"
   | "overline"
   | "code";
@@ -54,42 +55,60 @@ export type TypoProps = TextProps & {
  * - Headings tighter (≈1.15–1.25)
  * - Body generous (≈1.45–1.5)
  * - Subtle letter-spacing adjustments
+ *   Inter_400Regular,
+  Inter_600SemiBold,
+  Inter_700Bold,
  */
 const VARIANT: Record<Variant, TextStyle> = StyleSheet.create({
   displayXL: {
     fontSize: 48,
     lineHeight: 56,
-    fontWeight: "800",
+    fontFamily: "Inter_800ExtraBold",
     letterSpacing: -0.4,
   },
   displayL: {
     fontSize: 40,
     lineHeight: 48,
-    fontWeight: "800",
+    fontFamily: "Inter_800ExtraBold",
     letterSpacing: -0.2,
   },
 
-  h1: { fontSize: 32, lineHeight: 40, fontWeight: "700", letterSpacing: -0.1 },
-  h2: { fontSize: 28, lineHeight: 36, fontWeight: "700" },
-  h3: { fontSize: 24, lineHeight: 32, fontWeight: "700" },
+  h1: {
+    fontSize: 32,
+    lineHeight: 40,
+    fontFamily: "Inter_700Bold",
+    letterSpacing: -0.1,
+  },
+  h2: { fontSize: 28, lineHeight: 36, fontFamily: "Inter_700Bold" },
+  h3: { fontSize: 24, lineHeight: 32, fontFamily: "Inter_700Bold" },
 
-  title: { fontSize: 20, lineHeight: 28, fontWeight: "600" },
-  subtitle: { fontSize: 16, lineHeight: 24, fontWeight: "600" },
+  title: { fontSize: 20, lineHeight: 28, fontFamily: "Inter_600SemiBold" },
+  subtitle: { fontSize: 16, lineHeight: 24, fontFamily: "Inter_600SemiBold" },
 
   body: { fontSize: 16, lineHeight: 24, fontWeight: "400" },
-  bodyStrong: { fontSize: 16, lineHeight: 24, fontWeight: "600" },
-  bodySmall: { fontSize: 14, lineHeight: 20, fontWeight: "400" },
+  bodyStrong: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontFamily: "Inter_600SemiBold",
+  },
+  bodySmall: { fontSize: 14, lineHeight: 20, fontFamily: "Inter_400Regular" },
+
+  bodySmallBold: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontFamily: "Inter_500Medium",
+  },
 
   caption: {
     fontSize: 12,
     lineHeight: 16,
-    fontWeight: "500",
+    fontFamily: "Inter_500Medium",
     letterSpacing: 0.2,
   },
   overline: {
     fontSize: 11,
     lineHeight: 16,
-    fontWeight: "600",
+    fontFamily: "Inter_600SemiBold",
     letterSpacing: Platform.OS === "ios" ? 0.6 : 0.8,
     textTransform: "uppercase",
   },
@@ -99,8 +118,8 @@ const VARIANT: Record<Variant, TextStyle> = StyleSheet.create({
     lineHeight: 20,
     fontWeight: Platform.OS === "ios" ? "500" : "400",
     fontFamily: Platform.select({
-      ios: "Menlo",
-      android: "monospace",
+      ios: "Inter_400Regular",
+      android: "Inter_400Regular",
       default: undefined,
     }),
   },

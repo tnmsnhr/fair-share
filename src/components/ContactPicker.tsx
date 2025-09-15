@@ -130,7 +130,7 @@ const ContactPicker: React.FC<Props> = ({
           <View style={s.avatar}>
             <Image source={item?.image} style={{ flex: 1 }} />
           </View>
-          <Typo>{item?.name}</Typo>
+          <Typo variant="body">{item?.name}</Typo>
         </View>
         <View style={[s.checkBox, isContactSelected && s.selected]}>
           <Icon
@@ -145,7 +145,7 @@ const ContactPicker: React.FC<Props> = ({
 
   const renderSectionHeader = ({ section }: { section: ContactSection }) => (
     <View style={[s.header]}>
-      <Typo inline variant="bodySmall" tone="muted" weight="700">
+      <Typo inline variant="bodyStrong" tone="muted" weight={"600"}>
         {section.title}
       </Typo>
     </View>
@@ -165,7 +165,7 @@ const ContactPicker: React.FC<Props> = ({
         windowSize={2}
         removeClippedSubviews={Platform.OS === "android"}
         ItemSeparatorComponent={() => <Separator margin="xs" />}
-        SectionSeparatorComponent={() => <View style={{ height: 32 }} />}
+        SectionSeparatorComponent={() => <View style={{ height: 16 }} />}
         contentContainerStyle={s.content}
         keyboardShouldPersistTaps="always"
         keyboardDismissMode="none"
@@ -182,9 +182,9 @@ const useStyles = makeStyles((t) => ({
     flex: 1,
   },
   avatar: {
-    height: s("3xl"),
-    width: s("3xl"),
-    borderRadius: s("3xl") / 2,
+    height: s("2xl"),
+    width: s("2xl"),
+    borderRadius: s("2xl") / 2,
     backgroundColor: t.mutedText,
   },
   contactItem: {
