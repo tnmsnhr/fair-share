@@ -159,7 +159,7 @@ export const Typo: React.FC<TypoProps> = ({
     textDecorationLine: underline ? "underline" : base.textDecorationLine,
     textTransform: uppercase ? "uppercase" : base.textTransform,
     ...(weight ? { fontWeight: weight } : null),
-    ...(inline ? null : { alignSelf: "stretch", width: "100%" }), // block by default
+    // ...(inline ? null : { alignSelf: "stretch", width: "100%" }),
   };
 
   return (

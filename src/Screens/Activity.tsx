@@ -217,6 +217,12 @@ export default function Activity() {
             editable={false}
             tone="disabled"
           />
+          <Input
+            label="Ghost Input"
+            placeholder="Add detailed notes…"
+            multiline
+            helperText="You can enter multiple lines."
+          />
         </View>
         <View style={{ ...s.card, marginTop: 20 }}>
           <Typo>Split with</Typo>

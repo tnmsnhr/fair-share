@@ -7,6 +7,12 @@ import GroupOutline from "./svgs/GroupOutline";
 import Receipt from "./svgs/Receipt";
 import ReceiptOutline from "./svgs/ReceiptOutline";
 import Plus from "./svgs/Plus";
+import Cancel from "./svgs/Close";
+import ChevronDown from "./svgs/ChevronDown";
+import ChevronLeft from "./svgs/ChevronLeft";
+import ChevronRight from "./svgs/ChevronRight";
+import ChevronUp from "./svgs/ChevronUp";
+import Check from "./svgs/Check";
 
 export {
   Home,
@@ -18,4 +24,10 @@ export {
   Receipt,
   ReceiptOutline,
   Plus,
+  Cancel,
+  ChevronRight,
+  ChevronLeft,
+  ChevronUp,
+  ChevronDown,
+  Check,
 };

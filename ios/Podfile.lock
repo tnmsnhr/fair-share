@@ -32,6 +32,8 @@ PODS:
     - Yoga
   - ExpoAsset (11.1.7):
     - ExpoModulesCore
+  - ExpoContacts (14.2.5):
+    - ExpoModulesCore
   - ExpoFileSystem (18.1.11):
     - ExpoModulesCore
   - ExpoFont (13.3.2):
@@ -1396,6 +1398,30 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
+  - react-native-contacts (8.0.6):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-safe-area-context (5.4.0):
     - DoubleConversion
     - glog
@@ -1841,6 +1867,30 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNPermissions (5.4.2):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNReanimated (3.17.5):
     - DoubleConversion
     - glog
@@ -2074,6 +2124,7 @@ DEPENDENCIES:
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - Expo (from `../node_modules/expo`)
   - ExpoAsset (from `../node_modules/expo-asset/ios`)
+  - ExpoContacts (from `../node_modules/expo-contacts/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
   - ExpoFont (from `../node_modules/expo-font/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
@@ -2117,6 +2168,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
+  - react-native-contacts (from `../node_modules/react-native-contacts`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-oscompat (from `../node_modules/react-native/ReactCommon/oscompat`)
@@ -2151,6 +2203,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -2171,6 +2224,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo"
   ExpoAsset:
     :path: "../node_modules/expo-asset/ios"
+  ExpoContacts:
+    :path: "../node_modules/expo-contacts/ios"
   ExpoFileSystem:
     :path: "../node_modules/expo-file-system/ios"
   ExpoFont:
@@ -2254,6 +2309,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
+  react-native-contacts:
+    :path: "../node_modules/react-native-contacts"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-NativeModulesApple:
@@ -2322,6 +2379,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -2337,6 +2396,7 @@ SPEC CHECKSUMS:
   EXConstants: 9d62a46a36eae6d28cb978efcbc68aef354d1704
   Expo: f715b0c058ac26efde6fb3b4f18ffdd8bd933605
   ExpoAsset: 7bdbbacf4e6752ae6e3cf70555cee076f6229e6e
+  ExpoContacts: 8b3e0dfb1867c89187c9d7cb461329f35c5fea45
   ExpoFileSystem: 9681caebda23fa1b38a12a9c68b2bade7072ce20
   ExpoFont: 091a47eeaa1b30b0b760aa1d0a2e7814e8bf6fe6
   ExpoKeepAwake: e8dedc115d9f6f24b153ccd2d1d8efcdfd68a527
@@ -2378,6 +2438,7 @@ SPEC CHECKSUMS:
   React-logger: 6eca7d3c56341f3b001cf67d40452acfc4be7fa1
   React-Mapbuffer: 14cd6e1e5d4d088b3a8b2260f5aa8bba305462b0
   React-microtasksnativemodule: f3d90da65ab56fb854b77b70e3a8f63561cdabc6
+  react-native-contacts: d0b4fb03303c5ff05b802c3402ea27f4f5f550c3
   react-native-safe-area-context: 00d03dc688ba86664be66f9e3f203fc7d747d899
   React-NativeModulesApple: a398af5d9799bb49f0b0fabab09c362a3899d8bc
   React-oscompat: 56b4766e96b06843a3af49a6763ef40992e720aa
@@ -2412,6 +2473,7 @@ SPEC CHECKSUMS:
   ReactCommon: d7a6354467ffb346f88312e828764b87d4c81c75
   RNCAsyncStorage: c1bbcf629d7206d1e19310827848b98d68a4cbaf
   RNGestureHandler: ccf4105b125002bd88e39d2a1f2b7e6001bcdf34
+  RNPermissions: db3be1a6be82abebc1a09a109aab01117a159b96
   RNReanimated: 8b24b49fc13fce9a6e1729ccff645a63d2b7a6d1
   RNScreens: c2e3cc506212228c607b4785b315205e28acbf0f
   RNSVG: ee32efbed652c5151fd3f98bed13c68af285bc38
