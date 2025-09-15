@@ -14,17 +14,7 @@ export type {
 } from "./Button";
 
 // Typography
-export {
-  Typo,
-  Primary,
-  Secondary,
-  Caption,
-  CaptionBold,
-  Subtitle,
-  Title,
-  TitleBold,
-  Display,
-} from "./Typography";
+export { Typo, Caption, Subtitle, Title } from "./Typography";
 export type {
   TypoProps,
   Variant as TypographyVariant,
@@ -48,3 +38,13 @@ export type { IconName, IconVariant, IconProps } from "./Icons";
 
 // src/UI-Components/index.ts
 export { Separator } from "./Separator";
+
+// src/UI-Components/index.ts
+export { Header } from "./Header";
+
+// src/UI-Components/index.ts
+export { KeyboardAccessory } from "./KeyboardAccessory";
+
+export { Chip } from "./Chip";
+
+export { ScreenKAV } from "./ScreenKAV";

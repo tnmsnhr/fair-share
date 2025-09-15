@@ -15,7 +15,6 @@ import RootNavigator from "./src/navigation/RootNavigator";
 function Shell() {
   const t = useTheme();
 
-  // Bridge your theme to React Navigation so background isn’t white
   const navTheme = {
     ...(t.isDark ? DarkTheme : DefaultTheme),
     colors: {

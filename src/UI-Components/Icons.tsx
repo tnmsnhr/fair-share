@@ -14,6 +14,12 @@ import {
   Plus,
   Receipt,
   ReceiptOutline,
+  Cancel,
+  ChevronDown,
+  ChevronRight,
+  ChevronUp,
+  ChevronLeft,
+  Check,
 } from "@/assets/icons";
 
 // import Icons
@@ -24,7 +30,18 @@ const RawIcon = createIconSetFromIcoMoon(
   require("@/assets/fonts/icomoon.ttf") // optional fallback on web
 );
 
-export type IconName = "receipt" | "group" | "home" | "person" | "plus";
+export type IconName =
+  | "receipt"
+  | "group"
+  | "home"
+  | "person"
+  | "plus"
+  | "cancel"
+  | "chevronRight"
+  | "chevronLeft"
+  | "chevronUp"
+  | "chevronDown"
+  | "check";
 
 export type IconVariant = "outline" | "default";
 
@@ -47,6 +64,12 @@ const registry: Record<
   home: { default: Home, outline: HomeOutline },
   person: { default: Person, outline: PersonOutline },
   plus: { default: Plus },
+  cancel: { default: Cancel },
+  chevronRight: { default: ChevronRight },
+  chevronLeft: { default: ChevronLeft },
+  chevronUp: { default: ChevronUp },
+  chevronDown: { default: ChevronDown },
+  check: { default: Check },
 };
 
 export const Icon: React.FC<IconProps> = ({
@@ -67,10 +90,5 @@ export const Icon: React.FC<IconProps> = ({
   }
   return <Cmp width={size} height={size} color={resolvedColor} {...rest} />;
 };
-
-// export const Icon: React.FC<IconProps> = ({ color, size = 20, ...rest }) => {
-//   const t = useTheme();
-//   return <RawIcon size={size} color={color ?? t.text} {...rest} />;
-// };
 
 const styles = StyleSheet.create({});
