@@ -1,9 +1,15 @@
 // App.tsx
 import React from "react";
-import { useFonts } from "expo-font";
+import {
+  useFonts,
+  Inter_400Regular,
+  Inter_600SemiBold,
+  Inter_700Bold,
+} from "@expo-google-fonts/inter";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Platform, SafeAreaView } from "react-native";
+import * as SplashScreen from "expo-splash-screen";
 import {
   NavigationContainer,
   DarkTheme,
@@ -43,6 +49,17 @@ function Shell() {
 }
 
 export default function App() {
+  const [fontsLoaded, fontError] = useFonts({
+    Inter_400Regular,
+    Inter_600SemiBold,
+    Inter_700Bold,
+  });
+
+  React.useEffect(() => {
+    if (fontsLoaded || fontError) SplashScreen.hideAsync();
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded) return null;
   return (
     <ThemeProvider>
       <Shell />
