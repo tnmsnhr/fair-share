@@ -13,8 +13,9 @@ import {
   TextStyle,
   ImageStyle,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { colors } from "./colors";
+import { useStore } from "@/state/store";
+import { useShallow } from "zustand/react/shallow";
 
 /** Every token MUST have both light & dark */
 export type Token = { light: string; dark: string };
@@ -53,44 +54,39 @@ function resolve(scheme: Scheme): Theme {
 }
 
 type Mode = "system" | "light" | "dark";
-const MODE_KEY = "fareshare.theme.mode";
 
 const Ctx = createContext<{
   theme: Theme;
   mode: Mode;
   setMode: (m: Mode) => void;
-  hydrated: boolean;
 } | null>(null);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const os = useColorScheme(); // 'light' | 'dark' | null
-  const [mode, setModeState] = useState<Mode>("system");
-  const [hydrated, setHydrated] = useState(false);
 
-  // Load saved mode on first mount
-  useEffect(() => {
-    (async () => {
-      try {
-        const saved = await AsyncStorage.getItem(MODE_KEY);
-        if (saved === "light" || saved === "dark" || saved === "system") {
-          setModeState(saved);
-        }
-      } finally {
-        setHydrated(true);
-      }
-    })();
-  }, []);
+  const { themePreference, setThemePreference } = useStore(
+    useShallow((s) => ({
+      themePreference: s.themePreference,
+      setThemePreference: s.setThemePreference,
+    }))
+  );
 
   // Persist on change
   const setMode = useCallback((m: Mode) => {
-    setModeState(m);
-    AsyncStorage.setItem(MODE_KEY, m).catch(() => {});
+    setThemePreference(m);
   }, []);
 
-  const scheme: Scheme = mode === "system" ? ((os ?? "light") as Scheme) : mode;
+  const scheme: Scheme =
+    themePreference === "system"
+      ? ((os ?? "light") as Scheme)
+      : themePreference;
   const value = useMemo(
-    () => ({ theme: resolve(scheme), mode, setMode, hydrated }),
-    [scheme, mode, setMode, hydrated]
+    () => ({
+      theme: resolve(scheme),
+      mode: themePreference,
+      setMode,
+    }),
+    [scheme, themePreference, setMode]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
@@ -105,7 +101,7 @@ export const useTheme = () => {
 export const useThemeMode = () => {
   const ctx = useContext(Ctx);
   if (!ctx) throw new Error("useThemeMode must be used within ThemeProvider");
-  return { mode: ctx.mode, setMode: ctx.setMode, hydrated: ctx.hydrated };
+  return { mode: ctx.mode, setMode: ctx.setMode };
 };
 
 /** For StyleSheet usage */

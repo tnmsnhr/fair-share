@@ -1,5 +1,5 @@
 // App.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useFonts,
   Inter_400Regular,
@@ -18,6 +18,13 @@ import {
 } from "@react-navigation/native";
 import { ThemeProvider, useTheme } from "./src/theme/theme";
 import RootNavigator from "./src/navigation/RootNavigator";
+import { QueryProvider } from "@/contexts/QueryProvider";
+import { installOnlineSync } from "@/services/bootSync";
+import { registerBackgroundSync } from "@/services/backgroundSync";
+import "@/services/bootstrapOnline";
+import { useStore } from "@/state/store";
+
+SplashScreen.preventAutoHideAsync();
 
 function Shell() {
   const t = useTheme();
@@ -50,6 +57,7 @@ function Shell() {
 }
 
 export default function App() {
+  const hydrated = useStore((s) => s._hydrated);
   const [fontsLoaded, fontError] = useFonts({
     Inter_400Regular,
     Inter_600SemiBold,
@@ -57,14 +65,21 @@ export default function App() {
     Inter_500Medium,
   });
 
-  React.useEffect(() => {
-    if (fontsLoaded || fontError) SplashScreen.hideAsync();
-  }, [fontsLoaded, fontError]);
+  useEffect(() => {
+    if (fontsLoaded && hydrated) SplashScreen.hideAsync();
+  }, [fontsLoaded, hydrated]);
 
-  if (!fontsLoaded) return null;
+  useEffect(() => {
+    installOnlineSync();
+    registerBackgroundSync();
+  }, []);
+
+  if (!fontsLoaded || !hydrated) return null;
   return (
     <ThemeProvider>
-      <Shell />
+      <QueryProvider>
+        <Shell />
+      </QueryProvider>
     </ThemeProvider>
   );
 }
