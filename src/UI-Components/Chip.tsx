@@ -1,7 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native";
 import React from "react";
 import { makeStyles } from "@/theme/theme";
-import { Typo } from "./Typography";
+import { Body3, Typo } from "./Typography";
 import { s } from "@/theme/spacing";
 import { Icon } from "./Icons";
 
@@ -10,15 +16,19 @@ type Props = {
   pressable?: boolean;
   onCancel?: () => void;
   id?: string;
+  style?: ViewStyle;
 };
-export const Chip: React.FC<Props> = ({ label, pressable, onCancel }) => {
+export const Chip: React.FC<Props> = ({
+  label,
+  pressable,
+  onCancel,
+  style,
+}) => {
   const s = useStyles();
   return (
-    <View style={s.container}>
+    <View style={[s.container, style]}>
       <View style={s.avatar}>
-        <Typo variant="bodyStrong" tone="inverse">
-          {label?.[0]?.[0]}
-        </Typo>
+        <Body3 weight="bold">{label?.[0]?.[0]}</Body3>
       </View>
       <Typo variant="bodySmall">{label}</Typo>
       {pressable && (
@@ -35,17 +45,17 @@ const useStyles = makeStyles((t) => ({
     borderWidth: 1,
     borderRadius: s("md"),
     paddingRight: 8,
-    borderColor: "#93b091ff",
+    borderColor: t.border,
     height: s("2xl"),
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: "#bcc4d1ff",
+    backgroundColor: t.white,
   },
   avatar: {
     height: s("2xl"),
     width: s("2xl"),
-    backgroundColor: t.mutedText,
+    backgroundColor: t.border,
     borderRadius: s("2xl") / 2,
     marginRight: 4,
     justifyContent: "center",

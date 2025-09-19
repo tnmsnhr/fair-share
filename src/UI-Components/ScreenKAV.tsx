@@ -21,7 +21,7 @@ export const ScreenKAV: React.FC<Props> = ({
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={Platform.OS === "ios" ? "height" : undefined}
       //   keyboardVerticalOffset={Platform.OS === "ios" ? offset : 0}
     >
       {children}

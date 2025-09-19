@@ -17,8 +17,9 @@ import {
   requestContactPermission,
   searchContacts,
 } from "@/services/contacts";
-import { Icon, Separator, Typo } from "@/ui-components";
+import { Card, Icon, Separator, Typo } from "@/ui-components";
 import { s } from "@/theme/spacing";
+import { Body2 } from "@/ui-components/Typography";
 
 type ContactSection = { title: string; data: Contact[] };
 
@@ -130,7 +131,7 @@ const ContactPicker: React.FC<Props> = ({
           <View style={s.avatar}>
             <Image source={item?.image} style={{ flex: 1 }} />
           </View>
-          <Typo variant="body">{item?.name}</Typo>
+          <Body2>{item?.name}</Body2>
         </View>
         <View style={[s.checkBox, isContactSelected && s.selected]}>
           <Icon
@@ -145,14 +146,12 @@ const ContactPicker: React.FC<Props> = ({
 
   const renderSectionHeader = ({ section }: { section: ContactSection }) => (
     <View style={[s.header]}>
-      <Typo inline variant="bodyStrong" tone="muted" weight={"600"}>
-        {section.title}
-      </Typo>
+      <Body2 weight="semibold">{section.title}</Body2>
     </View>
   );
 
   return (
-    <View style={[s.container, UNSAFE_STYLE]}>
+    <Card style={{ padding: 0 }}>
       <SectionList<Contact, ContactSection>
         sections={contacts}
         keyExtractor={(item, index) => item?.id?.toString()}
@@ -163,24 +162,21 @@ const ContactPicker: React.FC<Props> = ({
         maxToRenderPerBatch={30}
         updateCellsBatchingPeriod={16}
         windowSize={2}
+        showsVerticalScrollIndicator={false}
         removeClippedSubviews={Platform.OS === "android"}
         ItemSeparatorComponent={() => <Separator margin="xs" />}
         SectionSeparatorComponent={() => <View style={{ height: 16 }} />}
-        contentContainerStyle={s.content}
         keyboardShouldPersistTaps="always"
         keyboardDismissMode="none"
         // style={{ backgroundColor: "red" }}
       />
-    </View>
+    </Card>
   );
 };
 
 export default ContactPicker;
 
 const useStyles = makeStyles((t) => ({
-  container: {
-    flex: 1,
-  },
   avatar: {
     height: s("2xl"),
     width: s("2xl"),

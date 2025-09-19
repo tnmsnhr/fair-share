@@ -11,18 +11,7 @@ import {
   Dropdown,
   Layout,
 } from "@/ui-components";
-import {
-  Body,
-  BodySmall,
-  BodyStrong,
-  DisplayL,
-  DisplayXL,
-  H1,
-  H2,
-  H3,
-  Overline,
-  Title,
-} from "@/ui-components/Typography";
+import { Body3, DisplayXL } from "@/ui-components/Typography";
 
 import React, { useState } from "react";
 import { View, Text, Pressable, ScrollView, SafeAreaView } from "react-native";
@@ -116,127 +105,12 @@ export default function Activity() {
         </View>
         <View style={{ ...s.card, marginTop: 20 }}>
           <View style={s.row}>
-            <DisplayXL>DisplayXL</DisplayXL>
-            <DisplayL>DisplayL</DisplayL>
-
-            <H1>H1 Typography</H1>
-            <H2>H2 Typography</H2>
-            <H3>H3 Typography</H3>
-
-            <Title>Title Typography</Title>
-            <Subtitle>Subtitle Typography</Subtitle>
-
-            <Body>Body Typography</Body>
-            <BodyStrong>BodyStrong Typography</BodyStrong>
-            <BodySmall>BodySmall Typography</BodySmall>
-          </View>
-          <View style={s.row}>
-            <Body tone="default">Default Tone</Body>
-            <Body tone="muted">Muted/secondary Tone</Body>
-            <Body tone="info">Info Tone</Body>
-            <Body tone="success">Success Tone</Body>
-            <Body tone="warning">Warning Tone</Body>
-            <Body tone="danger">Danger/negative Tone</Body>
-            <Body tone="debug">Debug Tone</Body>
-            <Body tone="disabled">Disabled/read-only Tone</Body>
-          </View>
-          <View style={s.row}>
-            <Body weight="700">Body Typography 700</Body>
-            <Body italic>Italic body</Body>
-            <Body underline>Underlined body</Body>
-            <Overline>Overline auto-uppercase</Overline>
-            <Typo variant="bodySmall" uppercase>
-              FORCED UPPERCASE SMALL
-            </Typo>
+            <DisplayXL weight="regular">DisplayXL</DisplayXL>
+            <DisplayXL weight="medium">DisplayXL</DisplayXL>
+            <DisplayXL weight="semibold">DisplayXL</DisplayXL>
+            <DisplayXL weight="bold">DisplayXL</DisplayXL>
           </View>
           <View style={s.row}></View>
-        </View>
-        <View style={{ ...s.card, marginTop: 20 }}>
-          <PrimaryButton label="Pay now" onPress={() => {}} />
-          <PrimaryButton label="Downloading…" loading fullWidth />
-
-          <SecondaryButton label="Add member" size="lg" />
-          <OutlineButton label="Retry" size="sm" weight="semibold" />
-          <GhostButton label="More options" onPress={() => {}} />
-
-          {/* Custom build */}
-          <Button
-            label="Custom"
-            variant="primary"
-            size="lg"
-            weight="bold"
-            rounded="pill"
-            rightIcon={
-              <View
-                style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: 6,
-                  backgroundColor: t.onPrimary,
-                }}
-              />
-            }
-            onPress={() => {}}
-          />
-        </View>
-        <View style={{ ...s.card, marginTop: 20 }}>
-          <Input
-            label="Full name"
-            placeholder="Enter your name"
-            //   value={name}
-            //   onChangeText={setName}
-            //   leftIcon={
-            //     <Ionicons name="person" size={18} color={t.mutedText} />
-            //   }
-            //   tone={name.length > 0 ? "success" : "default"}
-          />
-
-          <Input
-            label="UPI ID"
-            placeholder="name@bank"
-            helperText="We’ll never share your UPI."
-            //   rightIcon={
-            //     <Ionicons name="clipboard" size={18} color={t.mutedText} />
-            //   }
-            onPressRightIcon={() => {}}
-            size="lg"
-          />
-
-          <Input
-            label="Notes"
-            placeholder="Add detailed notes…"
-            multiline
-            minHeight={120} // ← sets textarea minimum height
-            helperText="You can enter multiple lines."
-          />
-
-          <Input
-            label="Disabled"
-            placeholder="Can't edit"
-            value="Read-only"
-            editable={false}
-            tone="disabled"
-          />
-          <Input
-            label="Ghost Input"
-            placeholder="Add detailed notes…"
-            multiline
-            helperText="You can enter multiple lines."
-          />
-        </View>
-        <View style={{ ...s.card, marginTop: 20 }}>
-          <Typo>Split with</Typo>
-
-          <Dropdown
-            label="Member"
-            placeholder="Choose a person"
-            value={who}
-            options={members}
-            onChange={(val) => setWho(val)}
-            // searchable
-          />
-
-          <PrimaryButton label="Continue" fullWidth disabled={!who} />
         </View>
       </View>
     </Layout>

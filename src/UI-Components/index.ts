@@ -14,7 +14,7 @@ export type {
 } from "./Button";
 
 // Typography
-export { Typo, Caption, Subtitle, Title } from "./Typography";
+export { Typo } from "./Typography";
 export type {
   TypoProps,
   Variant as TypographyVariant,
@@ -48,3 +48,5 @@ export { KeyboardAccessory } from "./KeyboardAccessory";
 export { Chip } from "./Chip";
 
 export { ScreenKAV } from "./ScreenKAV";
+
+export { Card } from "./Card";

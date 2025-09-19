@@ -5,6 +5,7 @@ import {
   Inter_400Regular,
   Inter_600SemiBold,
   Inter_700Bold,
+  Inter_500Medium,
 } from "@expo-google-fonts/inter";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -53,6 +54,7 @@ export default function App() {
     Inter_400Regular,
     Inter_600SemiBold,
     Inter_700Bold,
+    Inter_500Medium,
   });
 
   React.useEffect(() => {

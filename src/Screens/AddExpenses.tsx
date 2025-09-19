@@ -1,19 +1,23 @@
 import {
   InteractionManager,
   KeyboardAvoidingView,
+  NativeSyntheticEvent,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TextInputKeyPressEventData,
+  TouchableOpacity,
   View,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { makeStyles } from "@/theme/theme";
 import {
+  Card,
   Chip,
-  Header,
   Icon,
+  Input,
   KeyboardAccessory,
   ScreenKAV,
   Separator,
@@ -25,11 +29,15 @@ import ContactPicker from "@/components/ContactPicker";
 import { s } from "@/theme/spacing";
 import { useFocusEffect } from "@react-navigation/native";
 import { Contact } from "expo-contacts";
+import { colors } from "@/theme/colors";
+import { Body2, Body3, Header5 } from "@/ui-components/Typography";
 
 type AddExpensesScreenProps = NativeStackScreenProps<
   RootStackParamList,
   SCREEN.ADD_EXPENSES
 >;
+
+type SelectableContact = Contact & { selected: boolean };
 
 const ACCESSORY_ID = "kbd-accessory";
 
@@ -39,7 +47,7 @@ const AddExpenses: React.FC<AddExpensesScreenProps> = ({
 }) => {
   const s = useStyles();
 
-  const [sharedWith, setSharedWith] = useState<Contact[]>([]);
+  const [participants, setParticipants] = useState<SelectableContact[]>([]);
   const [query, setQuery] = useState("");
 
   const amountRef = useRef(null);
@@ -63,7 +71,7 @@ const AddExpenses: React.FC<AddExpensesScreenProps> = ({
   );
 
   const onContactSelect = (contacts: Contact[]) => {
-    setSharedWith(contacts);
+    setParticipants(contacts);
     setQuery("");
     amountRef?.current?.focus();
     console.log("onContactSelect", amountRef?.current);
@@ -78,81 +86,135 @@ const AddExpenses: React.FC<AddExpensesScreenProps> = ({
     amountRef?.current?.focus();
   };
 
-  return (
-    <View style={{ flex: 1 }}>
-      <Header UNSAFE_STYLE={s.topBar}>
-        <Header.Left pressable onPress={handleBack}>
-          <Icon name="chevronLeft" color="#fff" />
-        </Header.Left>
-        <Header.Title pressable>
-          <Typo tone="inverse" variant="bodyStrong">
-            Add an expense
-          </Typo>
-        </Header.Title>
-        <Header.Right>
-          <View style={s.currency}>
-            <Typo variant="bodySmall" tone="inverse">
-              ₹
-            </Typo>
-            <Icon name="chevronDown" size={14} color={"#fff"} />
-          </View>
-        </Header.Right>
-      </Header>
+  const handleKeyPress = (
+    e: NativeSyntheticEvent<TextInputKeyPressEventData>
+  ) => {
+    const { key } = e.nativeEvent;
+    console.log(query?.length, e.nativeEvent);
 
+    const updatedParticipants = [...participants];
+
+    if (query?.length === 0 && key == "Backspace") {
+      if (!updatedParticipants[updatedParticipants?.length - 1].selected) {
+        updatedParticipants[updatedParticipants?.length - 1].selected = true;
+      } else {
+        updatedParticipants.pop();
+      }
+    }
+
+    setParticipants(updatedParticipants);
+  };
+
+  return (
+    <>
       <ScreenKAV>
-        <View style={s.splitWithContainer}>
-          <View style={s.splitWith}>
-            {sharedWith?.length > 0 &&
-              sharedWith?.map((el) => (
-                <Chip label={el?.name} pressable key={el?.id} />
-              ))}
-            <TextInput
-              placeholder={
-                sharedWith?.length === 0 ? "Enter names, emails or phone#" : ""
-              }
-              style={s.splitWithInput}
-              ref={nameRef}
-              returnKeyType="next"
-              onSubmitEditing={handleContactNext}
-              onChangeText={handleQuery}
-              value={query}
-            />
-          </View>
-        </View>
-        <Separator />
-        {sharedWith?.length > 0 && !query?.trim() && (
-          // <KeyboardAvoidingView>
-          <>
-            <View style={s.amountContainer}>
-              <Typo>Amount</Typo>
-              <View style={s.amount}>
+        <View style={s.root}>
+          <View style={s.splitWithContainer}>
+            <Card style={{}}>
+              <Body2 weight="semibold" style={{ marginBottom: 16 }}>
+                Participants:
+              </Body2>
+              <View style={s.splitWith}>
+                {participants?.length > 0 &&
+                  participants?.map((el) => (
+                    <Chip
+                      label={el?.name}
+                      key={el?.id}
+                      style={[el?.selected && s.selectedParticipant]}
+                    />
+                  ))}
                 <TextInput
-                  keyboardType="numeric"
-                  placeholder="0.00"
-                  allowFontScaling
-                  ref={amountRef}
-                  style={s.amountInput}
-                  placeholderTextColor={"#ddddddff"}
-                  inputAccessoryViewID={
-                    Platform.OS === "ios" ? ACCESSORY_ID : undefined
+                  placeholder={
+                    participants?.length === 0
+                      ? "Enter names, emails or phone#"
+                      : ""
                   }
+                  style={s.splitWithInput}
+                  ref={nameRef}
+                  returnKeyType="next"
+                  onSubmitEditing={handleContactNext}
+                  onKeyPress={handleKeyPress}
+                  onChangeText={handleQuery}
+                  value={query}
                 />
               </View>
+            </Card>
+          </View>
+
+          {participants?.length > 0 && !query?.trim() && (
+            <ScrollView
+              contentContainerStyle={{
+                paddingVertical: 20,
+                paddingHorizontal: 16,
+              }}
+            >
+              <Card style={{ padding: 0 }}>
+                <View style={s.topAmountSection}>
+                  <View style={s.amountContainerHeader}>
+                    <Body2 weight="semibold" tone="primary">
+                      Amount:
+                    </Body2>
+                    <TouchableOpacity style={s.payConfig} activeOpacity={0.7}>
+                      <Body3>Paid by you and split equally</Body3>
+                      <Icon name="chevronDown" size={16} />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={s.amountBox}>
+                    <TouchableOpacity style={s.currency}>
+                      <Header5
+                        weight="semibold"
+                        tone="inverse"
+                        style={{ marginRight: 4 }}
+                      >
+                        ₹
+                      </Header5>
+                      <Icon name="chevronDown" size={16} color="#fff" />
+                    </TouchableOpacity>
+                    <TextInput
+                      keyboardType="numeric"
+                      placeholder="Enter Amount"
+                      ref={amountRef}
+                      style={s.amountInput}
+                      placeholderTextColor={"#ddddddff"}
+                      inputAccessoryViewID={
+                        Platform.OS === "ios" ? ACCESSORY_ID : undefined
+                      }
+                    />
+                  </View>
+                </View>
+                <Separator />
+                <View style={s.noteSection}>
+                  <Body2 weight="semibold">Notes(Optional):</Body2>
+                  <Input
+                    placeholder="Add description"
+                    containerStyle={s.noteInput}
+                  />
+                </View>
+              </Card>
+
+              {/* <KeyboardAccessory nativeID={ACCESSORY_ID} label="Next" /> */}
+              <Separator />
+            </ScrollView>
+          )}
+          {(participants?.length === 0 || !!query?.trim()) && (
+            <View
+              style={{
+                paddingHorizontal: 16,
+                marginTop: 16,
+                flex: 1,
+              }}
+            >
+              <ContactPicker
+                // UNSAFE_STYLE={s.contactPicker}
+                onSelect={onContactSelect}
+                selected={participants}
+                query={query}
+              />
             </View>
-            <KeyboardAccessory nativeID={ACCESSORY_ID} label="Next" />
-          </>
-        )}
-        <Separator />
-        {(sharedWith?.length === 0 || !!query?.trim()) && (
-          <ContactPicker
-            UNSAFE_STYLE={s.contactPicker}
-            onSelect={onContactSelect}
-            selected={sharedWith}
-            query={query}
-          />
-        )}
+          )}
+        </View>
       </ScreenKAV>
-    </View>
+    </>
   );
 };
 
@@ -160,15 +222,13 @@ export default AddExpenses;
 
 const useStyles = makeStyles((t) => {
   return {
-    topBar: {
-      backgroundColor: t.primary,
-    },
-    topbarTitle: {
-      alignSelf: "center",
+    root: {
+      flex: 1,
+      backgroundColor: colors.gray50,
+      paddingTop: s("md"),
     },
     splitWithContainer: {
       paddingHorizontal: s("md"),
-      marginVertical: s("sm"),
       flexDirection: "row",
       gap: s("xs"),
       flexWrap: "wrap",
@@ -178,41 +238,62 @@ const useStyles = makeStyles((t) => {
       gap: s("xs"),
       flexWrap: "wrap",
       alignItems: "center",
-      flex: 1,
+    },
+    selectedParticipant: {
+      backgroundColor: colors.tertiary950,
     },
     splitWithInput: {
-      height: s("xl"),
+      height: s("2xl"),
       minWidth: 50,
       flex: 1,
     },
-    amountContainer: {
-      justifyContent: "center",
-      alignItems: "center",
-      marginVertical: s("md"),
+    topAmountSection: {
+      padding: s("lg"),
     },
-    amount: {
+    amountContainerHeader: {
       flexDirection: "row",
-      alignItems: "flex-end",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    payConfig: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: t.border,
+      padding: s("xs"),
+      borderRadius: 10,
+    },
+    amountBox: {
+      height: 72,
+      marginTop: 16,
+      borderWidth: 1,
+      borderColor: t.primary,
+      borderRadius: 16,
+      paddingHorizontal: 16,
+      flexDirection: "row",
+      alignItems: "center",
     },
     amountInput: {
-      fontSize: 40,
-      fontWeight: "bold",
-      alignSelf: "center",
+      fontSize: 24,
+      fontFamily: "Inter_600SemiBold",
+      flex: 1,
       color: t.primary,
-      marginTop: s("xs"),
-      minWidth: 80,
     },
     currency: {
-      backgroundColor: "rgba(255,255,2545,0.2)",
+      backgroundColor: t.primary,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
       paddingHorizontal: s("sm"),
       paddingVertical: 2,
-      borderRadius: 20,
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
+      borderRadius: 16,
+      marginRight: s("md"),
     },
-    contactPicker: {
-      // paddingTop: 20,
+    noteSection: {
+      padding: s("lg"),
+    },
+    noteInput: {
+      marginTop: s("md"),
     },
   };
 });

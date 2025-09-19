@@ -7,19 +7,17 @@ import { withAlpha } from "@/theme/colorUtils";
 /** Variants (type ramp) */
 export type Variant =
   | "displayXL"
-  | "displayL"
-  | "h1"
-  | "h2"
-  | "h3"
-  | "title"
-  | "subtitle"
-  | "body"
-  | "bodyStrong"
-  | "bodySmall"
-  | "bodySmallBold"
-  | "caption"
-  | "overline"
-  | "code";
+  | "displayLG"
+  | "header1"
+  | "header2"
+  | "header3"
+  | "header4"
+  | "header5"
+  | "body1"
+  | "body2"
+  | "body3"
+  | "body4"
+  | "micro";
 
 /** Semantic tones mapped to theme colors */
 export type Tone =
@@ -31,17 +29,20 @@ export type Tone =
   | "danger"
   | "debug"
   | "disabled"
+  | "primary"
   | "inverse";
+
+export type Weight = "regular" | "medium" | "semibold" | "bold";
 
 export type TypoProps = TextProps & {
   variant?: Variant;
   tone?: Tone;
-  align?: TextStyle["textAlign"];
+  // align?: TextStyle["textAlign"];
   italic?: boolean;
   underline?: boolean;
   uppercase?: boolean;
   /** Optional explicit weight override (e.g. "700") */
-  weight?: Exclude<TextStyle["fontWeight"], undefined>;
+  weight?: Weight;
   /** Respect OS font scaling (default true) */
   allowFontScaling?: boolean;
   /** Cap accessibility scaling */
@@ -61,69 +62,44 @@ export type TypoProps = TextProps & {
  */
 const VARIANT: Record<Variant, TextStyle> = StyleSheet.create({
   displayXL: {
+    fontSize: 60,
+    lineHeight: 72,
+  },
+  displayLG: {
     fontSize: 48,
-    lineHeight: 56,
-    fontFamily: "Inter_800ExtraBold",
-    letterSpacing: -0.4,
+    lineHeight: 60,
   },
-  displayL: {
-    fontSize: 40,
+
+  header1: {
+    fontSize: 36,
     lineHeight: 48,
-    fontFamily: "Inter_800ExtraBold",
-    letterSpacing: -0.2,
   },
+  header2: { fontSize: 30, lineHeight: 40 },
+  header3: { fontSize: 24, lineHeight: 36 },
+  header4: { fontSize: 20, lineHeight: 30 },
+  header5: { fontSize: 18, lineHeight: 27 },
 
-  h1: {
-    fontSize: 32,
-    lineHeight: 40,
-    fontFamily: "Inter_700Bold",
-    letterSpacing: -0.1,
-  },
-  h2: { fontSize: 28, lineHeight: 36, fontFamily: "Inter_700Bold" },
-  h3: { fontSize: 24, lineHeight: 32, fontFamily: "Inter_700Bold" },
-
-  title: { fontSize: 20, lineHeight: 28, fontFamily: "Inter_600SemiBold" },
-  subtitle: { fontSize: 16, lineHeight: 24, fontFamily: "Inter_600SemiBold" },
-
-  body: { fontSize: 16, lineHeight: 24, fontWeight: "400" },
-  bodyStrong: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontFamily: "Inter_600SemiBold",
-  },
-  bodySmall: { fontSize: 14, lineHeight: 20, fontFamily: "Inter_400Regular" },
-
-  bodySmallBold: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontFamily: "Inter_500Medium",
-  },
-
-  caption: {
-    fontSize: 12,
-    lineHeight: 16,
-    fontFamily: "Inter_500Medium",
-    letterSpacing: 0.2,
-  },
-  overline: {
-    fontSize: 11,
-    lineHeight: 16,
-    fontFamily: "Inter_600SemiBold",
-    letterSpacing: Platform.OS === "ios" ? 0.6 : 0.8,
-    textTransform: "uppercase",
-  },
-
-  code: {
-    fontSize: 13,
-    lineHeight: 20,
-    fontWeight: Platform.OS === "ios" ? "500" : "400",
-    fontFamily: Platform.select({
-      ios: "Inter_400Regular",
-      android: "Inter_400Regular",
-      default: undefined,
-    }),
-  },
+  body1: { fontSize: 16, lineHeight: 24 },
+  body2: { fontSize: 14, lineHeight: 21 },
+  body3: { fontSize: 12, lineHeight: 18 },
+  body4: { fontSize: 10, lineHeight: 15 },
+  micro: { fontSize: 8, lineHeight: 12 },
 });
+
+const WEIGHT: Record<Weight, { fontFamily: string }> = {
+  regular: {
+    fontFamily: "Inter_400Regular",
+  },
+  medium: {
+    fontFamily: "Inter_500Medium",
+  },
+  semibold: {
+    fontFamily: "Inter_600SemiBold",
+  },
+  bold: {
+    fontFamily: "Inter_700Bold",
+  },
+};
 
 function toneColor(tone: Tone, t: ReturnType<typeof useTheme>): string {
   switch (tone) {
@@ -145,6 +121,8 @@ function toneColor(tone: Tone, t: ReturnType<typeof useTheme>): string {
       return withAlpha(t.text, 0.5);
     case "inverse":
       return t.onPrimary ?? "#ffffff";
+    case "primary":
+      return t.primary;
     default:
       return t.text;
   }
@@ -153,9 +131,9 @@ function toneColor(tone: Tone, t: ReturnType<typeof useTheme>): string {
 /** Core component: block-level by default; set inline to true for inline usage */
 export const Typo: React.FC<TypoProps> = ({
   children,
-  variant = "body",
+  variant = "body3",
   tone = "default",
-  align,
+  // align,
   italic,
   underline,
   uppercase,
@@ -173,11 +151,13 @@ export const Typo: React.FC<TypoProps> = ({
   const computed: TextStyle = {
     ...base,
     color,
-    textAlign: align ?? base.textAlign,
-    fontStyle: italic ? "italic" : base.fontStyle,
-    textDecorationLine: underline ? "underline" : base.textDecorationLine,
-    textTransform: uppercase ? "uppercase" : base.textTransform,
-    ...(weight ? { fontWeight: weight } : null),
+    // textAlign: align ?? base.textAlign,
+    textDecorationLine: underline ? "underline" : "none",
+    textTransform: uppercase ? "uppercase" : "none",
+    fontFamily: "Inter_400Regular",
+    ...(weight ? WEIGHT[weight] : null),
+    letterSpacing: 0.1,
+    // width: "100%",
     // ...(inline ? null : { alignSelf: "stretch", width: "100%" }),
   };
 
@@ -195,17 +175,16 @@ export const Typo: React.FC<TypoProps> = ({
 
 /** Handy aliases */
 export const DisplayXL = (p: TypoProps) => <Typo {...p} variant="displayXL" />;
-export const DisplayL = (p: TypoProps) => <Typo {...p} variant="displayL" />;
-export const H1 = (p: TypoProps) => <Typo {...p} variant="h1" />;
-export const H2 = (p: TypoProps) => <Typo {...p} variant="h2" />;
-export const H3 = (p: TypoProps) => <Typo {...p} variant="h3" />;
-export const Title = (p: TypoProps) => <Typo {...p} variant="title" />;
-export const Subtitle = (p: TypoProps) => <Typo {...p} variant="subtitle" />;
-export const Body = (p: TypoProps) => <Typo {...p} variant="body" />;
-export const BodyStrong = (p: TypoProps) => (
-  <Typo {...p} variant="bodyStrong" />
-);
-export const BodySmall = (p: TypoProps) => <Typo {...p} variant="bodySmall" />;
-export const Caption = (p: TypoProps) => <Typo {...p} variant="caption" />;
-export const Overline = (p: TypoProps) => <Typo {...p} variant="overline" />;
-export const Code = (p: TypoProps) => <Typo {...p} variant="code" />;
+export const DisplayLG = (p: TypoProps) => <Typo {...p} variant="displayLG" />;
+export const Header1 = (p: TypoProps) => <Typo {...p} variant="header1" />;
+export const Header2 = (p: TypoProps) => <Typo {...p} variant="header2" />;
+export const Header3 = (p: TypoProps) => <Typo {...p} variant="header3" />;
+export const Header4 = (p: TypoProps) => <Typo {...p} variant="header4" />;
+export const Header5 = (p: TypoProps) => <Typo {...p} variant="header5" />;
+
+export const Body1 = (p: TypoProps) => <Typo {...p} variant="body1" />;
+export const Body2 = (p: TypoProps) => <Typo {...p} variant="body2" />;
+export const Body3 = (p: TypoProps) => <Typo {...p} variant="body3" />;
+export const Body4 = (p: TypoProps) => <Typo {...p} variant="body4" />;
+
+export const Micro = (p: TypoProps) => <Typo {...p} variant="micro" />;

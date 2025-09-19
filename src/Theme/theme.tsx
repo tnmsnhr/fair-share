@@ -14,6 +14,7 @@ import {
   ImageStyle,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { colors } from "./colors";
 
 /** Every token MUST have both light & dark */
 export type Token = { light: string; dark: string };
@@ -22,18 +23,18 @@ export type TokenMap = Record<string, Token>;
 const tokens = {
   bg: { light: "#f8fafc", dark: "#0a0f14" },
   card: { light: "#ffffff", dark: "#0a0f14" },
-  border: { light: "#c7ced6", dark: "#1b2433" },
-  primary: { light: "#2563eb", dark: "#3b82f6" },
+  border: { light: colors.gray100, dark: colors.gray100 },
+  primary: { light: colors.primary950, dark: colors.primary950 },
   onPrimary: { light: "#ffffff", dark: "#0b0f13" },
-  text: { light: "#1a1f26", dark: "#f2f4f8" },
-  mutedText: { light: "#475569", dark: "#cbd5e1" },
+  text: { light: colors.black, dark: "#f2f4f8" },
+  mutedText: { light: colors.gray500, dark: "#cbd5e1" },
   success: { light: "#16a34a", dark: "#22c55e" },
   warning: { light: "#f59e0b", dark: "#fbbf24" },
   danger: { light: "#dc2626", dark: "#ef4444" },
   backdrop: { light: "#5c636e", dark: "#213045" },
   navBorder: { light: "#c7ced6", dark: "#26364f" },
   icon: { light: "#0a0f14", dark: "#f8fafc" },
-  white: { light: "#f8fafc", dark: "#f8fafc" },
+  white: { light: colors.white, dark: "#f8fafc" },
 } as const satisfies TokenMap;
 
 export type Scheme = "light" | "dark";

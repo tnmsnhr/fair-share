@@ -35,6 +35,7 @@ export type InputProps = Omit<
   containerStyle?: StyleProp<ViewStyle>;
   inputStyle?: StyleProp<TextStyle>;
   helperStyle?: StyleProp<TextStyle>;
+  style?: ViewStyle;
 };
 
 const HEIGHT: Record<Size, number> = { sm: 36, md: 44, lg: 52 };
@@ -57,7 +58,8 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
     onFocus,
     onBlur,
     multiline,
-    minHeight, // ← NEW
+    minHeight,
+    style,
     ...rest
   },
   ref
@@ -138,7 +140,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
   };
 
   return (
-    <View style={{ width: "100%" }}>
+    <View style={[{ width: "100%" }, style]}>
       {label ? (
         <Text style={{ color: t.mutedText, fontSize: 13, marginBottom: 6 }}>
           {label}
