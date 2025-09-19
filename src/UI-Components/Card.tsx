@@ -4,20 +4,38 @@ import { makeStyles } from "@/theme/theme";
 import { colors } from "@/theme/colors";
 import { s } from "@/theme/spacing";
 
-type Props = { children?: ReactNode; style?: ViewStyle };
+type Props = {
+  children?: ReactNode;
+  style?: ViewStyle;
+  variant?: "primary" | "default";
+};
 
-export const Card: React.FC<Props> = ({ children, style }) => {
+export const Card: React.FC<Props> = ({
+  children,
+  style,
+  variant = "default",
+}) => {
   const s = useStyles();
-  return <View style={[s.root, style]}>{children}</View>;
+  return (
+    <View
+      style={[
+        s.root,
+        variant == "primary"
+          ? { backgroundColor: colors.primary900, borderWidth: 0 }
+          : { backgroundColor: colors.white, borderWidth: 1 },
+        style,
+      ]}
+    >
+      {children}
+    </View>
+  );
 };
 
 const useStyles = makeStyles((t) => ({
   root: {
-    backgroundColor: colors.white,
     width: "100%",
     borderRadius: s("xl"),
     padding: s("lg"),
-    borderWidth: 1,
     borderColor: t.border,
     flex: 1,
     overflow: "hidden",

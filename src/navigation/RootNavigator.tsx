@@ -7,6 +7,7 @@ import AddExpenses from "@/screens/AddExpenses";
 import { Header, Icon } from "@/ui-components";
 import { Body1 } from "@/ui-components/Typography";
 import { makeStyles } from "@/theme/theme";
+import MyProfile from "@/screens/MyProfile";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -24,10 +25,7 @@ const RootNavigator = () => {
         name={SCREEN.ADD_EXPENSES}
         component={AddExpenses}
         options={{
-          // presentation: "formSheet",
-          // gestureEnabled: false,
           headerShown: true,
-          // headerBackTitle: "",
           header: ({ navigation, options }) => (
             <Header UNSAFE_STYLE={s.topBar}>
               <Header.Left
@@ -45,6 +43,7 @@ const RootNavigator = () => {
           ),
         }}
       />
+      <Stack.Screen name={SCREEN.MY_PROFILE} component={MyProfile} />
     </Stack.Navigator>
   );
 };

@@ -30,6 +30,7 @@ export type Tone =
   | "debug"
   | "disabled"
   | "primary"
+  | "tertiary"
   | "inverse";
 
 export type Weight = "regular" | "medium" | "semibold" | "bold";
@@ -123,6 +124,8 @@ function toneColor(tone: Tone, t: ReturnType<typeof useTheme>): string {
       return t.onPrimary ?? "#ffffff";
     case "primary":
       return t.primary;
+    case "tertiary":
+      return t.tertiary900;
     default:
       return t.text;
   }

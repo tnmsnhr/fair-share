@@ -93,7 +93,7 @@ export function Layout(props: LayoutProps) {
         <LinearGradient
           pointerEvents="none"
           colors={gradColors}
-          locations={[0, 0.6, 1]}
+          locations={[0, 0, 1]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={[styles.topGradient, { height: Math.max(gradientHeight, 1) }]}

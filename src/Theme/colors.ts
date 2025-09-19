@@ -34,6 +34,7 @@ export const basePalette: Palette = {
 };
 
 export const colors = {
+  primaryDark: "#160d34ff",
   primary950: "#683BFC",
   primary900: "#7952FC",
   primary800: "#9475FD",
