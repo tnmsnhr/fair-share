@@ -11,9 +11,10 @@ import { Body1, Body2, Body3, Header3 } from "@/ui-components/Typography";
 import { makeStyles } from "@/theme/theme";
 import { colors } from "@/theme/colors";
 import { s } from "@/theme/spacing";
-import Bg from "../assets/images/radial_gradient.svg";
+import Bg from "../../assets/images/radial_gradient.svg";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, SCREEN } from "@/navigation/type";
+import { useHydrated, useRecentTransactions } from "@/state/selectors";
 
 const { width } = Dimensions.get("window");
 const SUMMARY_CARD = 4;
@@ -22,10 +23,14 @@ type HomeScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.HOME>;
 
 const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
   const s = useStyles();
+  const tx = useRecentTransactions(10);
+  const hydrated = useHydrated();
 
   const handleProfileTap = () => {
     navigation?.navigate(SCREEN.MY_PROFILE);
   };
+
+  console.log(tx);
 
   return (
     <Layout scroll>

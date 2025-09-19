@@ -1,78 +1,47 @@
+// src/state/store.ts
 import { create } from "zustand";
-import { devtools, persist, createJSONStorage } from "zustand/middleware";
+import {
+  devtools,
+  persist,
+  createJSONStorage,
+  subscribeWithSelector,
+} from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-/** ---- Slices (types) ---- */
-type ThemePref = "system" | "light" | "dark";
+import type {
+  ThemePref,
+  CurrencyCode,
+  User,
+  Contact,
+  Group,
+  TransactionEntry,
+  Store,
+} from "./types";
+import { createUserSlice, type UserSlice } from "./slices/user";
+import { createContactsSlice, type ContactsSlice } from "./slices/contacts";
+import { createExpensesSlice, type ExpensesSlice } from "./slices/expenses";
 
-type SessionSlice = {
-  token?: string;
-  setToken: (t?: string) => void;
-  clearSession: () => void;
-};
-
-type UISlice = {
-  themePreference: ThemePref;
-  setThemePreference: (p: ThemePref) => void;
-
-  bottomSheetOpen: boolean;
-  setBottomSheetOpen: (open: boolean) => void;
-};
-
-type SyncSlice = {
-  /** number of offline operations waiting to sync */
-  offlineQueue: number;
-  setOfflineQueue: (n: number) => void;
-  incOfflineQueue: () => void;
-  decOfflineQueue: () => void;
-};
-
-type Hydration = {
-  /** turns true after rehydration from storage */
-  _hydrated: boolean;
-  _setHydrated: (b: boolean) => void;
-};
-
-export type Store = SessionSlice & UISlice & SyncSlice & Hydration;
-
-/** ---- Store ---- */
 export const useStore = create<Store>()(
   devtools(
     persist(
-      (set, get) => ({
-        // Session
-        token: undefined,
-        setToken: (t) => set({ token: t }),
-        clearSession: () => set({ token: undefined }),
+      subscribeWithSelector<Store>((set, get) => ({
+        ...createUserSlice(set, get, undefined as any),
+        ...createContactsSlice(set, get, undefined as any),
+        ...createExpensesSlice(set, get, undefined as any),
 
-        // UI
-        themePreference: "system",
-        setThemePreference: (p) => set({ themePreference: p }),
-
-        bottomSheetOpen: false,
-        setBottomSheetOpen: (open) => set({ bottomSheetOpen: open }),
-
-        // Sync
-        offlineQueue: 0,
-        setOfflineQueue: (n) => set({ offlineQueue: n }),
-        incOfflineQueue: () =>
-          set((s) => ({ offlineQueue: s.offlineQueue + 1 })),
-        decOfflineQueue: () =>
-          set((s) => ({ offlineQueue: Math.max(0, s.offlineQueue - 1) })),
-
-        // Hydration flag
         _hydrated: false,
         _setHydrated: (b) => set({ _hydrated: b }),
-      }),
+      })),
       {
-        name: "fs.store", // storage key
+        name: "fs.root",
         storage: createJSONStorage(() => AsyncStorage),
-        onRehydrateStorage: () => (state) => {
-          // called after hydration completes
-          state?._setHydrated(true);
-        },
-        // (optional) only persist some keys:
-        // partialize: (s) => ({ token: s.token, themePreference: s.themePreference }),
+        partialize: (s) => ({
+          me: s.me,
+          contacts: s.contacts,
+          groups: s.groups,
+          transactions: s.transactions,
+        }),
+        onRehydrateStorage: () => (state) => state?._setHydrated(true),
       }
     )
   )

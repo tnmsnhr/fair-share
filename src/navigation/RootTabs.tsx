@@ -1,10 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "@/screens/Home";
+import Home from "@/screens/Home/Home";
 import TabBar from "./TabBar";
-import Friends from "@/screens/Friends";
-import AddExpenses from "@/screens/AddExpenses";
-import Group from "@/screens/Group";
+import Friends from "@/screens/Friends/Friends";
+import AddExpenses from "@/screens/AddExpense/AddExpenses";
+import Group from "@/screens/Groups/Group";
 import Activity from "@/screens/Activity";
 import { SCREEN } from "./type";
 

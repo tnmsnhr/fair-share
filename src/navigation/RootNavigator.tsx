@@ -3,11 +3,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { RootStackParamList, SCREEN } from "./type";
 import RootTabs from "./RootTabs";
-import AddExpenses from "@/screens/AddExpenses";
+import AddExpenses from "@/screens/AddExpense/AddExpenses";
 import { Header, Icon } from "@/ui-components";
 import { Body1 } from "@/ui-components/Typography";
 import { makeStyles } from "@/theme/theme";
-import MyProfile from "@/screens/MyProfile";
+import MyProfile from "@/screens/MyProfile/MyProfile";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
