@@ -15,6 +15,8 @@ import Bg from "../../assets/images/radial_gradient.svg";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList, SCREEN } from "@/navigation/type";
 import { useHydrated, useRecentTransactions } from "@/state/selectors";
+import { useStore } from "@/state/store";
+import { shallow } from "zustand/shallow";
 
 const { width } = Dimensions.get("window");
 const SUMMARY_CARD = 4;
@@ -24,13 +26,14 @@ type HomeScreenProps = NativeStackScreenProps<RootStackParamList, SCREEN.HOME>;
 const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
   const s = useStyles();
   const tx = useRecentTransactions(10);
-  const hydrated = useHydrated();
+  const { fullName, phone, ...rest } = useStore((s) => s.me);
+  // const [contacts] = useStore((s) => s.contacts);
 
   const handleProfileTap = () => {
     navigation?.navigate(SCREEN.MY_PROFILE);
   };
 
-  console.log(tx);
+  console.log(fullName, phone, rest);
 
   return (
     <Layout scroll>
@@ -44,8 +47,8 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
             <Icon name="person" variant="outline" color="#fff" />
           </TouchableOpacity>
           <View style={s.namePhone}>
-            <Body2 weight="semibold">Good evening, Tanmoy</Body2>
-            <Body3 tone="debug">+91-8910115736</Body3>
+            <Body2 weight="semibold">Good evening, {fullName}</Body2>
+            <Body3 tone="debug">{phone}</Body3>
           </View>
         </View>
         {/* <TouchableOpacity style={s.topBarRight} activeOpacity={0.6}>
@@ -64,7 +67,7 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
           </View>
           <TouchableOpacity activeOpacity={0.6} style={s.cardRight}>
             <Body3>View Spending</Body3>
-            <Icon name="chevronRight" style={{ marginLeft: 4 }} size={12} />
+            <Icon name="chevron-right" style={{ marginLeft: 4 }} size={12} />
           </TouchableOpacity>
         </View>
 
@@ -90,16 +93,16 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
         <Body1 weight="medium">Spending summary:</Body1>
         <View style={s.summaryCardContainer}>
           <View style={s.summaryCard}>
-            <Icon name="receipt" size={32} color={colors.primary900} />
+            <Icon name="bar-chart" size={32} color={colors.primary900} />
           </View>
           <View style={s.summaryCard}>
-            <Icon name="receipt" size={32} color={colors.primary900} />
+            <Icon name="sports" size={32} color={colors.primary900} />
           </View>
           <View style={s.summaryCard}>
-            <Icon name="receipt" size={32} color={colors.primary900} />
+            <Icon name="doc" size={32} color={colors.primary900} />
           </View>
           <View style={s.summaryCard}>
-            <Icon name="receipt" size={32} color={colors.primary900} />
+            <Icon name="drink" size={32} color={colors.primary900} />
           </View>
         </View>
       </View>
@@ -115,7 +118,7 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
                   { backgroundColor: colors.tertiary900 },
                 ]}
               >
-                <Icon name="receipt" color="#fff" size={20} />
+                <Icon name="bill-outline" color="#fff" size={20} />
               </View>
               <View>
                 <Body2 weight="medium">Interest</Body2>
@@ -136,7 +139,7 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
                   { backgroundColor: colors.tertiary900 },
                 ]}
               >
-                <Icon name="receipt" color="#fff" size={20} />
+                <Icon name="sports-outline" color="#fff" size={20} />
               </View>
               <View>
                 <Body2 weight="medium">Interest</Body2>
@@ -157,7 +160,7 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
                   { backgroundColor: colors.tertiary900 },
                 ]}
               >
-                <Icon name="receipt" color="#fff" size={20} />
+                <Icon name="doc-outline" color="#fff" size={20} />
               </View>
               <View>
                 <Body2 weight="medium">Interest</Body2>
@@ -175,10 +178,10 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
               <View
                 style={[
                   s.transactionAvatar,
-                  { backgroundColor: colors.tertiary900 },
+                  { backgroundColor: colors.secondary900 },
                 ]}
               >
-                <Icon name="receipt" color="#fff" size={20} />
+                <Icon name="bar-chart-outline" color="#fff" size={20} />
               </View>
               <View>
                 <Body2 weight="medium">Interest</Body2>
@@ -196,10 +199,10 @@ const Home: React.FC<HomeScreenProps> = ({ navigation }) => {
               <View
                 style={[
                   s.transactionAvatar,
-                  { backgroundColor: colors.tertiary900 },
+                  { backgroundColor: colors.primary900 },
                 ]}
               >
-                <Icon name="receipt" color="#fff" size={20} />
+                <Icon name="drink" color="#fff" size={20} />
               </View>
               <View>
                 <Body2 weight="medium">Interest</Body2>

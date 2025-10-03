@@ -22,10 +22,10 @@ export const createUserSlice: StateCreator<
   // Seed a local user (no API yet)
   me: {
     id: "me",
-    username: "tanmoy",
+    username: "tanmoys",
     fullName: "Tanmoy",
     email: "",
-    phone: "",
+    phone: "+91-8910115736",
     avatarUrl: "",
     currency: "INR",
     themePreference: "system",

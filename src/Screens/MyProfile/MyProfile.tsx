@@ -34,7 +34,7 @@ const MyProfile: React.FC<MyProfileScreenProps> = ({ navigation }) => {
             marginBottom: 32,
           }}
         >
-          <Icon name="chevronLeft" color="#fff" />
+          <Icon name="chevron-left" color="#fff" />
         </TouchableOpacity>
         <View style={s.profileInfo}>
           <TouchableOpacity activeOpacity={0.6} style={s.avatar}>

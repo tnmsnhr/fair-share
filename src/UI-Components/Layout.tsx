@@ -81,7 +81,7 @@ export function Layout(props: LayoutProps) {
   // gradient colors (solid bg → soft → transparent)
   const gradColors = [
     t.bg,
-    withAlpha(t.bg, t.isDark ? 0.85 : 0.92),
+    withAlpha(t.bg, t.isDark ? 0.85 : 0.85),
     withAlpha(t.bg, 0),
   ];
 

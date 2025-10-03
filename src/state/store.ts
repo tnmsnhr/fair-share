@@ -36,10 +36,10 @@ export const useStore = create<Store>()(
         name: "fs.root",
         storage: createJSONStorage(() => AsyncStorage),
         partialize: (s) => ({
-          me: s.me,
-          contacts: s.contacts,
-          groups: s.groups,
-          transactions: s.transactions,
+          // me: s.me,
+          // contacts: s.contacts,
+          // groups: s.groups,
+          // transactions: s.transactions,
         }),
         onRehydrateStorage: () => (state) => state?._setHydrated(true),
       }

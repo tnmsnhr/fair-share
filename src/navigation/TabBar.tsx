@@ -52,10 +52,10 @@ export default function CustomTabBar({
     focused: boolean
   ): { name: IconName; variant: IconVariant } => {
     const map: Record<keyof SCREEN, IconName> = {
-      Home: "home",
-      Activity: "receipt",
-      Groups: "group",
-      Friends: "person",
+      Home: focused ? "home" : "home-outline",
+      Activity: focused ? "activity" : "activity-outline",
+      Groups: focused ? "group" : "group-outline",
+      Friends: focused ? "person" : "person-outline",
     };
     return { name: map[name], variant: focused ? "default" : "outline" };
   };
@@ -133,7 +133,7 @@ export default function CustomTabBar({
               >
                 <Icon
                   {...iconFor(route.name, focused)}
-                  size={28}
+                  size={20}
                   color={focused ? t.primary : t.mutedText}
                 />
                 <Text style={[styles.label, { color }]} numberOfLines={1}>
@@ -162,7 +162,7 @@ export default function CustomTabBar({
           ]}
           accessibilityRole="button"
         >
-          <Icon name="plus" size={40} color={t.white} />
+          <Icon name="plus" size={30} color={t.white} />
         </Pressable>
       </View>
     </View>

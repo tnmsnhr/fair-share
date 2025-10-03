@@ -32,7 +32,7 @@ const RootNavigator = () => {
                 pressable
                 onPress={() => navigation.canGoBack() && navigation.goBack()}
               >
-                <Icon name="chevronLeft" color="#fff" />
+                <Icon name="chevron-left" color="#fff" />
               </Header.Left>
               <Header.Title pressable>
                 <Body1 tone="inverse" weight="medium">

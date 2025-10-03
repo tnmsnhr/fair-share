@@ -74,3 +74,51 @@ export type EqualSplitInput = {
   groupId?: ID;
   createdAt?: string; // optional override
 };
+
+// src/state/types.ts
+export type SplitType = "EQUAL" | "PERCENT" | "AMOUNT" | "SHARE";
+
+export type Payer = {
+  userId: string;
+  amount: number; // how much this user actually paid
+};
+
+export type TxShareInput = {
+  userId: string;
+  value: number; // meaning depends on SplitType:
+  // EQUAL: ignored; PERCENT: % (0..100); AMOUNT: absolute; SHARE: share units
+};
+
+export type TxParticipant = string; // userId
+
+export type TxTransfer = {
+  fromUserId: string; // debtor
+  toUserId: string; // creditor
+  amount: number; // settled amount for this transaction
+};
+
+export type Transaction = {
+  id: string;
+  title: string;
+  notes?: string;
+  tags?: string[];
+  category?: string;
+  currency: CurrencyCode;
+
+  totalAmount: number;
+  date: number; // epoch ms
+  groupId?: string | null; // optional
+
+  splitType: SplitType;
+  participants: TxParticipant[]; // must include every owing party (can include me)
+  payers: Payer[]; // one or many
+
+  shares: TxShareInput[]; // inputs that define how total is divided among participants
+  // normalized internally to per-user owed amounts
+
+  // Precomputed settlement edges for this single transaction
+  transfers: TxTransfer[];
+
+  createdAt: number;
+  updatedAt: number;
+};
